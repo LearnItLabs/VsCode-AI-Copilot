@@ -1,83 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Word Frequency Analyzer</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 2em; }
-        label { display: block; margin-top: 1em; }
-        table { border-collapse: collapse; margin-top: 1em; }
-        th, td { border: 1px solid #ccc; padding: 0.5em 1em; }
-        th { background: #f0f0f0; }
-    </style>
+	<meta charset="UTF-8">
+	<title>Word Frequency Analyzer</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 2em;
+		}
+
+		label {
+			display: block;
+			margin-top: 1em;
+		}
+
+		table {
+			border-collapse: collapse;
+			margin-top: 1em;
+		}
+
+		th,
+		td {
+			border: 1px solid #ccc;
+			padding: 0.5em 1em;
+		}
+
+		th {
+			background: #f0f0f0;
+		}
+	</style>
 </head>
+
 <body>
-    <h2>Word Frequency Analyzer</h2>
-    <label>
-        Select text file:
-        <input type="file" id="fileInput" accept=".txt">
-    </label>
-    <label>
-        Ignore words (comma separated):
-        <input type="text" id="ignoreWordsInput" placeholder="e.g. the, and, a">
-    </label>
-    <button id="analyzeBtn">Analyze</button>
-    <div id="fileName"></div>
-    <div id="results"></div>
+	<h2>Word Frequency Analyzer</h2>
+	<label>
+		Select text file:
+		<input type="file" id="fileInput" accept=".txt">
+	</label>
+	<label>
+		Ignore words (comma separated):
+		<input type="text" id="ignoreWordsInput" placeholder="e.g. the, and, a">
+	</label>
+	<button id="analyzeBtn">Analyze</button>
+	<div id="fileName"></div>
+	<div id="results"></div>
 
-    <script>
-        function getWordCounts(text, ignoreWords) {
-            const ignoreSet = new Set(ignoreWords.split(',')
-                .map(w => w.trim().toLowerCase())
-                .filter(w => w.length > 0));
-            const words = text
-                .toLowerCase()
-                .replace(/[\.\,\!\?\;\:\-\(\)\[\]\"\'\r\n]/g, ' ')
-                .split(/\s+/)
-                .filter(w => w.length > 0 && !ignoreSet.has(w));
-            const counts = {};
-            for (const word of words) {
-                counts[word] = (counts[word] || 0) + 1;
-            }
-            // Convert to array and sort by count descending
-            return Object.entries(counts)
-                .map(([word, count]) => ({ word, count }))
-                .sort((a, b) => b.count - a.count);
-        }
+	<script>
+		function getWordCounts(text, ignoreWords) {
+			const ignoreSet = new Set(ignoreWords.split(',')
+				.map(w => w.trim().toLowerCase())
+				.filter(w => w.length > 0));
+			const words = text
+				.toLowerCase()
+				.replace(/[\.\,\!\?\;\:\-\(\)\[\]\"\'\r\n]/g, ' ')
+				.split(/\s+/)
+				.filter(w => w.length > 0 && !ignoreSet.has(w));
+			const counts = {};
+			for (const word of words) {
+				counts[word] = (counts[word] || 0) + 1;
+			}
+			// Convert to array and sort by count descending
+			return Object.entries(counts)
+				.map(([word, count]) => ({ word, count }))
+				.sort((a, b) => b.count - a.count);
+		}
 
-        document.getElementById('analyzeBtn').addEventListener('click', function () {
-            const fileInput = document.getElementById('fileInput');
-            const ignoreWords = document.getElementById('ignoreWordsInput').value;
-            const resultsDiv = document.getElementById('results');
-            const fileNameDiv = document.getElementById('fileName');
-            resultsDiv.innerHTML = '';
-            fileNameDiv.textContent = '';
+		document.getElementById('analyzeBtn').addEventListener('click', function () {
+			const fileInput = document.getElementById('fileInput');
+			const ignoreWords = document.getElementById('ignoreWordsInput').value;
+			const resultsDiv = document.getElementById('results');
+			const fileNameDiv = document.getElementById('fileName');
+			resultsDiv.innerHTML = '';
+			fileNameDiv.textContent = '';
 
-            if (!fileInput.files.length) {
-                alert('Please select a text file.');
-                return;
-            }
+			if (!fileInput.files.length) {
+				alert('Please select a text file.');
+				return;
+			}
 
-            const file = fileInput.files[0];
-            fileNameDiv.textContent = `Selected file: ${file.name}`;
+			const file = fileInput.files[0];
+			fileNameDiv.textContent = `Selected file: ${file.name}`;
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const text = e.target.result;
-                const wordStats = getWordCounts(text, ignoreWords);
-                if (wordStats.length === 0) {
-                    resultsDiv.textContent = 'No words found.';
-                    return;
-                }
-                let html = '<table><tr><th>Word</th><th>Count</th></tr>';
-                for (const { word, count } of wordStats) {
-                    html += `<tr><td>${word}</td><td>${count}</td></tr>`;
-                }
-                html += '</table>';
-                resultsDiv.innerHTML = html;
-            };
-            reader.readAsText(file);
-        });
-    </script>
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				const text = e.target.result;
+				const wordStats = getWordCounts(text, ignoreWords);
+				if (wordStats.length === 0) {
+					resultsDiv.textContent = 'No words found.';
+					return;
+				}
+				let html = '<table><tr><th>Word</th><th>Count</th></tr>';
+				for (const { word, count } of wordStats) {
+					html += `<tr><td>${word}</td><td>${count}</td></tr>`;
+				}
+				html += '</table>';
+				resultsDiv.innerHTML = html;
+			};
+			reader.readAsText(file);
+		});
+	</script>
 </body>
+
 </html>
