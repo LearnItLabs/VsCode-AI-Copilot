@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kaleidoscope</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="kaleidoscope" aria-label="Interactive kaleidoscope canvas"></canvas>
+
+    <div class="ui" role="region" aria-label="Kaleidoscope controls">
+      <div class="ui__row">
+        <div class="ui__status" aria-live="polite">
+          <span class="ui__status-item">Segments: <span id="segments-count">--</span></span>
+          <span class="ui__status-sep">•</span>
+          <span class="ui__status-item">Status: <span id="run-status">--</span></span>
+          <span class="ui__status-sep">•</span>
+          <span class="ui__status-item">Pattern: <span id="pattern-name">--</span></span>
+          <span class="ui__status-sep">•</span>
+          <span class="ui__status-item">Palette: <span id="palette-name">--</span></span>
+        </div>
+      </div>
+      <div class="ui__row ui__controls" aria-label="Controls">
+        <button id="btn-dec" class="btn" aria-label="Decrease segments" title="[  Decrease segments">−</button>
+        <button id="btn-inc" class="btn" aria-label="Increase segments" title="]  Increase segments">+</button>
+        <button id="btn-random" class="btn" aria-label="Randomize palette and pattern" title="R  Randomize">Randomize</button>
+        <button id="btn-pattern" class="btn" aria-label="Cycle pattern" title="P  Cycle Pattern">Pattern</button>
+        <button id="btn-toggle" class="btn btn--primary" aria-label="Pause or resume" title="Space  Pause/Resume">Pause</button>
+      </div>
+      <div class="ui__row ui__hint">
+        <span>Mouse/touch: rotate & offset • Keys: [ ] R Space P C</span>
+      </div>
+    </div>
+
+    <script defer src="app.js"></script>
+  </body>
+</html>
