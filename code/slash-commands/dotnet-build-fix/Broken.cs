@@ -10,7 +10,7 @@ internal class Broken {
 
  
 	internal void Show() {
-		int result = Multiply(6, 7);
+		int result = Multiply(3, 8);
 		Console.WriteLine($"Result: {result}");
 	}
 	internal int Multiply(int a, int b) {
