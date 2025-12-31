@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedalPineTours", "PedalPineTours\PedalPineTours.csproj", "{A45F0BC3-9F45-9682-7FC5-BEFC7E83D857}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A45F0BC3-9F45-9682-7FC5-BEFC7E83D857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A45F0BC3-9F45-9682-7FC5-BEFC7E83D857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A45F0BC3-9F45-9682-7FC5-BEFC7E83D857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A45F0BC3-9F45-9682-7FC5-BEFC7E83D857}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D018F0E8-05F5-415A-BFFE-28C9494091C8}
+	EndGlobalSection
+EndGlobal
