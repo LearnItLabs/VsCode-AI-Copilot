@@ -1,0 +1,221 @@
+@page
+@model RazorSimple.Pages.Customers.EditModel
+@{
+    ViewData["Title"] = $"Edit {Model.Customer?.FullName}";
+}
+
+@if (Model.Customer == null)
+{
+    <div class="alert alert-danger">
+        <h4><i class="fas fa-exclamation-triangle"></i> Customer Not Found</h4>
+        <p>The customer you're trying to edit doesn't exist.</p>
+        <a asp-page="Index" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Customers
+        </a>
+    </div>
+}
+else
+{
+    <h1 class="display-6 mb-4">
+        <i class="fas fa-edit text-primary"></i> Edit Customer: @Model.Customer.FullName
+    </h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post">
+                <input asp-for="Customer.Id" type="hidden" />
+                <input asp-for="Customer.RegisteredAt" type="hidden" />
+                
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-id-card"></i> Personal Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Customer.FirstName" class="form-label">First Name</label>
+                                <input asp-for="Customer.FirstName" class="form-control" />
+                                <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Customer.LastName" class="form-label">Last Name</label>
+                                <input asp-for="Customer.LastName" class="form-control" />
+                                <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Customer.Email" class="form-label">Email Address</label>
+                            <input asp-for="Customer.Email" type="email" class="form-control" />
+                            <span asp-validation-for="Customer.Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Customer.PhoneNumber" class="form-label">Phone Number</label>
+                            <input asp-for="Customer.PhoneNumber" type="tel" class="form-control" />
+                            <span asp-validation-for="Customer.PhoneNumber" class="text-danger"></span>
+                            <div class="form-text">Optional - Format: (555) 123-4567</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Customer.DateOfBirth" class="form-label">Date of Birth</label>
+                            <input asp-for="Customer.DateOfBirth" type="date" class="form-control" />
+                            <span asp-validation-for="Customer.DateOfBirth" class="text-danger"></span>
+                            <div class="form-text">Current age: @Model.Customer.Age years old</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Customer.City" class="form-label">City</label>
+                                <input asp-for="Customer.City" class="form-control" />
+                                <span asp-validation-for="Customer.City" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Customer.Country" class="form-label">Country</label>
+                                <input asp-for="Customer.Country" class="form-control" />
+                                <span asp-validation-for="Customer.Country" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5><i class="fas fa-bicycle"></i> Cycling Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Customer.BikingExperience" class="form-label">Cycling Experience Level</label>
+                            <select asp-for="Customer.BikingExperience" class="form-select">
+                                <option value="">Select experience level...</option>
+                                <option value="@ExperienceLevel.Beginner">Beginner - New to cycling</option>
+                                <option value="@ExperienceLevel.Recreational">Recreational - Casual rider</option>
+                                <option value="@ExperienceLevel.Intermediate">Intermediate - Regular cyclist</option>
+                                <option value="@ExperienceLevel.Advanced">Advanced - Experienced rider</option>
+                                <option value="@ExperienceLevel.Professional">Professional - Competitive cyclist</option>
+                            </select>
+                            <span asp-validation-for="Customer.BikingExperience" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5><i class="fas fa-file-signature"></i> Insurance Waiver</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input asp-for="Customer.HasSignedWaiver" class="form-check-input" />
+                            <label asp-for="Customer.HasSignedWaiver" class="form-check-label">
+                                Customer has signed the insurance waiver
+                            </label>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle text-info"></i> 
+                                All customers must sign an insurance waiver before participating in tours.
+                            </div>
+                        </div>
+                        
+                        @if (Model.Customer.HasSignedWaiver)
+                        {
+                            <div class="alert alert-success mt-2">
+                                <i class="fas fa-check-circle"></i> 
+                                This customer is cleared for tour participation.
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning mt-2">
+                                <i class="fas fa-exclamation-triangle"></i> 
+                                This customer cannot participate in tours until the waiver is signed.
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <a asp-page="Details" asp-route-id="@Model.Customer.Id" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <a asp-page="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6><i class="fas fa-info-circle"></i> Customer Information</h6>
+                </div>
+                <div class="card-body">
+                    <p><strong>Customer ID:</strong> @Model.Customer.Id</p>
+                    <p><strong>Registered:</strong> @Model.Customer.RegisteredAt.ToString("MMMM dd, yyyy")</p>
+                    <p><strong>Current Age:</strong> @Model.Customer.Age years old</p>
+                    
+                    <hr />
+                    
+                    <h6>Waiver Status:</h6>
+                    @if (Model.Customer.HasSignedWaiver)
+                    {
+                        <span class="badge bg-success">
+                            <i class="fas fa-check-circle"></i> Signed
+                        </span>
+                        <p class="small text-success mt-1">Customer is cleared for tours</p>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning">
+                            <i class="fas fa-exclamation-triangle"></i> Pending
+                        </span>
+                        <p class="small text-warning mt-1">Waiver required before tours</p>
+                    }
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6><i class="fas fa-trash"></i> Danger Zone</h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small">
+                        Permanently delete this customer and all associated data.
+                    </p>
+                    <button type="button" class="btn btn-danger btn-sm" 
+                            onclick="confirmDelete(@Model.Customer.Id, '@Model.Customer.FullName')">
+                        <i class="fas fa-trash"></i> Delete Customer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        function confirmDelete(customerId, customerName) {
+            if (confirm(`Are you sure you want to delete ${customerName}? This action cannot be undone.`)) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/Customers/Edit/${customerId}?handler=Delete`;
+                
+                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = token;
+                form.appendChild(tokenInput);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+}

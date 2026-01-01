@@ -1,0 +1,92 @@
+/* CSS-based placeholder images for tours */
+
+/* Enhanced tour image placeholders with realistic gradients using new color palette */
+.mountain-trail {
+    background: linear-gradient(135deg, #4A8C2A 0%, #3E6D32 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.mountain-trail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%);
+}
+
+.coastal-ride {
+    background: linear-gradient(135deg, #A5C8E5 0%, #4A8C2A 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.coastal-ride::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%),
+        radial-gradient(circle at 30% 70%, rgba(255,255,255,0.1) 0%, transparent 50%);
+}
+
+.desert-adventure {
+    background: linear-gradient(135deg, #B7D95C 0%, #4A8C2A 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.desert-adventure::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 60% 30%, rgba(255,255,255,0.2) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+}
+
+.countryside-farms {
+    background: linear-gradient(135deg, #B7D95C 0%, #A5C8E5 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.countryside-farms::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%),
+        radial-gradient(circle at 70% 20%, rgba(255,255,255,0.15) 0%, transparent 50%);
+}
+
+.urban-explorer {
+    background: linear-gradient(135deg, #3E6D32 0%, #B7D95C 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.urban-explorer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+}

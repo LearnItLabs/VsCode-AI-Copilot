@@ -1,0 +1,208 @@
+@page
+@model RazorSimple.Pages.Tours.IndexModel
+@{
+  ViewData["Title"] = "Our Tours";
+}
+
+<div class="row mb-4">
+  <div class="col-md-8">
+    <h1 class="display-4"><i class="fas fa-bicycle"></i> Our Cycling Tours</h1>
+    <p class="lead">Explore our selection of guided cycling adventures</p>
+  </div>
+  <div class="col-md-4">
+    <div class="search-filters">
+      <form method="get" class="d-flex flex-column gap-2">
+        <div class="input-group">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+          <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search tours..." />
+        </div>
+        <select name="difficulty" class="form-select">
+          <option value="">All Difficulty Levels</option>
+          <option value="Beginner" selected="@(Model.FilterDifficulty == DifficultyLevel.Beginner)">
+            <i class="fas fa-leaf"></i> Beginner
+          </option>
+          <option value="Intermediate" selected="@(Model.FilterDifficulty == DifficultyLevel.Intermediate)">
+            <i class="fas fa-hiking"></i> Intermediate
+          </option>
+          <option value="Advanced" selected="@(Model.FilterDifficulty == DifficultyLevel.Advanced)">
+            <i class="fas fa-mountain-sun"></i> Advanced
+          </option>
+          <option value="Expert" selected="@(Model.FilterDifficulty == DifficultyLevel.Expert)">
+            <i class="fas fa-fire"></i> Expert
+          </option>
+        </select>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-search"></i> Search
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+@if (!Model.Tours.Any())
+{
+  <div class="alert alert-info">
+    <h4><i class="fas fa-info-circle"></i> No tours found</h4>
+    <p>Try adjusting your search criteria or browse all available tours.</p>
+    <a href="/Tours" class="btn btn-primary"><i class="fas fa-eye"></i> View All Tours</a>
+  </div>
+}
+else
+{
+  <div class="row">
+    @foreach (var tour in Model.Tours)
+    {
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+          <!-- Tour Image -->
+          <div class="tour-image-container position-relative">
+            <img src="~/images/PromoPics/@(tour.Name.ToLower() switch {
+              var name when name.Contains("mountain") => "Mountain-Header.jpg",
+              var name when name.Contains("coastal") => "Coast-Header.jpg", 
+              var name when name.Contains("desert") => "Desert-Header.jpg",
+              var name when name.Contains("countryside") || name.Contains("farm") => "Farm-Header.jpg",
+              var name when name.Contains("urban") => "Urban-Header.jpg",
+              _ => "Mountain-Header.jpg"
+            })" 
+            alt="@tour.Name" 
+            class="card-img-top tour-promo-image" />
+            <div class="tour-image-overlay">
+              <i class="@(tour.Name.ToLower() switch {
+                var name when name.Contains("mountain") => "fas fa-mountain-sun",
+                var name when name.Contains("coastal") => "fas fa-water", 
+                var name when name.Contains("desert") => "fas fa-sun",
+                var name when name.Contains("countryside") || name.Contains("farm") => "fas fa-seedling",
+                var name when name.Contains("urban") => "fas fa-city",
+                _ => "fas fa-bicycle"
+              })"></i>
+            </div>
+          </div>
+          
+          <div class="card-header">
+            <h5 class="card-title mb-1">@tour.Name</h5>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="badge bg-@(tour.Difficulty switch 
+              {
+                DifficultyLevel.Beginner => "success",
+                DifficultyLevel.Intermediate => "warning",
+                DifficultyLevel.Advanced => "danger",
+                DifficultyLevel.Expert => "dark",
+                _ => "secondary"
+              })">
+                <i class="@(tour.Difficulty switch 
+                {
+                  DifficultyLevel.Beginner => "fas fa-leaf",
+                  DifficultyLevel.Intermediate => "fas fa-hiking",
+                  DifficultyLevel.Advanced => "fas fa-mountain-sun",
+                  DifficultyLevel.Expert => "fas fa-fire",
+                  _ => "fas fa-bicycle"
+                })"></i>
+                @tour.Difficulty
+              </span>
+              <small class="text-muted">
+                @{
+                  var rating = Model.GetAverageRating(tour.Id);
+                  var count = Model.GetTestimonialCount(tour.Id);
+                }
+                @if (rating > 0)
+                {
+                  <span class="rating-stars">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                      <i class="@(i <= rating ? "fas fa-star" : "far fa-star")"></i>
+                    }
+                  </span>
+                  <small>@rating.ToString("F1") (@count reviews)</small>
+                }
+                else
+                {
+                  <span><i class="far fa-star"></i> No reviews yet</span>
+                }
+              </small>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-text">@tour.Description</p>
+            <div class="tour-stats">
+              <div class="tour-stat-item">
+                <span class="tour-stat-icon"><i class="fas fa-calendar-alt"></i></span>
+                <strong>Duration:</strong> @tour.DurationDays day@(tour.DurationDays != 1 ? "s" : "")
+              </div>
+              <div class="tour-stat-item">
+                <span class="tour-stat-icon"><i class="fas fa-route"></i></span>
+                <strong>Distance:</strong> @tour.DistanceKm km
+              </div>
+              <div class="tour-stat-item">
+                <span class="tour-stat-icon"><i class="fas fa-map-marker-alt"></i></span>
+                <strong>Route:</strong> @tour.StartLocation to @tour.EndLocation
+              </div>
+              <div class="tour-stat-item">
+                <span class="tour-stat-icon"><i class="fas fa-calendar"></i></span>
+                <strong>Dates:</strong> @tour.StartDate.ToString("MMM dd") - @tour.EndDate.ToString("MMM dd, yyyy")
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="h5 text-primary mb-0">
+                <i class="fas fa-dollar-sign"></i>@tour.Price
+              </span>
+              <div>
+                @if (tour.IsAvailable)
+                {
+                  <span class="badge bg-success">
+                    <i class="fas fa-check-circle"></i> @tour.AvailableSpots spots left
+                  </span>
+                }
+                else
+                {
+                  <span class="badge bg-secondary">
+                    <i class="fas fa-times-circle"></i> Fully Booked
+                  </span>
+                }
+              </div>
+            </div>
+            <div class="mt-2 d-grid">
+              <a asp-page="Details" asp-route-id="@tour.Id" class="btn btn-primary">
+                <i class="fas fa-eye"></i> View Details
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}
+
+@if (string.IsNullOrWhiteSpace(Model.SearchTerm) && !Model.FilterDifficulty.HasValue)
+{
+  <div class="mt-5">
+    <h3><i class="fas fa-trophy text-warning"></i> Why Choose Our Tours?</h3>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="text-center feature-card card p-3">
+          <h4><i class="fas fa-medal text-warning"></i> Expert Guides</h4>
+          <p>Local knowledge and safety expertise</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="text-center feature-card card p-3">
+          <h4><i class="fas fa-bicycle text-primary"></i> Quality Equipment</h4>
+          <p>Well-maintained bikes and safety gear</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="text-center feature-card card p-3">
+          <h4><i class="fas fa-users text-info"></i> Small Groups</h4>
+          <p>Personalized attention and better experience</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="text-center feature-card card p-3">
+          <h4><i class="fas fa-utensils text-success"></i> Local Cuisine</h4>
+          <p>Authentic local food experiences</p>
+        </div>
+      </div>
+    </div>
+  </div>
+}

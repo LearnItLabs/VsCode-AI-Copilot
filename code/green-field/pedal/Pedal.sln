@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedalTours", "PedalTours.csproj", "{E1CBD8CE-771A-C21C-033D-4F05ACE00CCF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Example Build configuration|Any CPU = Example Build configuration|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1CBD8CE-771A-C21C-033D-4F05ACE00CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1CBD8CE-771A-C21C-033D-4F05ACE00CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1CBD8CE-771A-C21C-033D-4F05ACE00CCF}.Example Build configuration|Any CPU.ActiveCfg = Example Build configuration|Any CPU
+		{E1CBD8CE-771A-C21C-033D-4F05ACE00CCF}.Example Build configuration|Any CPU.Build.0 = Example Build configuration|Any CPU
+		{E1CBD8CE-771A-C21C-033D-4F05ACE00CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1CBD8CE-771A-C21C-033D-4F05ACE00CCF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {73902D8A-0615-43F8-B3AE-0B63B54D1181}
+	EndGlobalSection
+EndGlobal

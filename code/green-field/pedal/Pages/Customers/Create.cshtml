@@ -1,0 +1,148 @@
+@page
+@model RazorSimple.Pages.Customers.CreateModel
+@{
+    ViewData["Title"] = "Add New Customer";
+}
+
+<h1 class="display-6 mb-4">
+    <i class="fas fa-user-plus text-success"></i> Add New Customer
+</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-id-card"></i> Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Customer.FirstName" class="form-label">First Name</label>
+                            <input asp-for="Customer.FirstName" class="form-control" />
+                            <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Customer.LastName" class="form-label">Last Name</label>
+                            <input asp-for="Customer.LastName" class="form-control" />
+                            <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Customer.Email" class="form-label">Email Address</label>
+                        <input asp-for="Customer.Email" type="email" class="form-control" />
+                        <span asp-validation-for="Customer.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Customer.PhoneNumber" class="form-label">Phone Number</label>
+                        <input asp-for="Customer.PhoneNumber" type="tel" class="form-control" />
+                        <span asp-validation-for="Customer.PhoneNumber" class="text-danger"></span>
+                        <div class="form-text">Optional - Format: (555) 123-4567</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Customer.DateOfBirth" class="form-label">Date of Birth</label>
+                        <input asp-for="Customer.DateOfBirth" type="date" class="form-control" />
+                        <span asp-validation-for="Customer.DateOfBirth" class="text-danger"></span>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Customer.City" class="form-label">City</label>
+                            <input asp-for="Customer.City" class="form-control" />
+                            <span asp-validation-for="Customer.City" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Customer.Country" class="form-label">Country</label>
+                            <input asp-for="Customer.Country" class="form-control" />
+                            <span asp-validation-for="Customer.Country" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5><i class="fas fa-bicycle"></i> Cycling Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Customer.BikingExperience" class="form-label">Cycling Experience Level</label>
+                        <select asp-for="Customer.BikingExperience" class="form-select">
+                            <option value="">Select experience level...</option>
+                            <option value="@ExperienceLevel.Beginner">Beginner - New to cycling</option>
+                            <option value="@ExperienceLevel.Recreational">Recreational - Casual rider</option>
+                            <option value="@ExperienceLevel.Intermediate">Intermediate - Regular cyclist</option>
+                            <option value="@ExperienceLevel.Advanced">Advanced - Experienced rider</option>
+                            <option value="@ExperienceLevel.Professional">Professional - Competitive cyclist</option>
+                        </select>
+                        <span asp-validation-for="Customer.BikingExperience" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5><i class="fas fa-file-signature"></i> Insurance Waiver</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-check">
+                        <input asp-for="Customer.HasSignedWaiver" class="form-check-input" />
+                        <label asp-for="Customer.HasSignedWaiver" class="form-check-label">
+                            Customer has signed the insurance waiver
+                        </label>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle text-info"></i> 
+                            All customers must sign an insurance waiver before participating in tours.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i> Create Customer
+                </button>
+                <a asp-page="Index" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6><i class="fas fa-info-circle"></i> Customer Information</h6>
+            </div>
+            <div class="card-body">
+                <h6>Required Information:</h6>
+                <ul class="list-unstyled mb-3">
+                    <li><i class="fas fa-check text-success"></i> First & Last Name</li>
+                    <li><i class="fas fa-check text-success"></i> Email Address</li>
+                    <li><i class="fas fa-check text-success"></i> Date of Birth</li>
+                    <li><i class="fas fa-check text-success"></i> Experience Level</li>
+                </ul>
+                
+                <h6>Optional Information:</h6>
+                <ul class="list-unstyled mb-3">
+                    <li><i class="fas fa-minus text-muted"></i> Phone Number</li>
+                    <li><i class="fas fa-minus text-muted"></i> City & Country</li>
+                </ul>
+
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Insurance Waiver:</strong> Customers without a signed waiver cannot participate in tours.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

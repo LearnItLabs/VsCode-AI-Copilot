@@ -1,0 +1,207 @@
+@page
+@model RazorSimple.Pages.Customers.DetailsModel
+@{
+    ViewData["Title"] = Model.Customer?.FullName ?? "Customer Details";
+}
+
+@if (Model.Customer == null)
+{
+    <div class="alert alert-danger">
+        <h4><i class="fas fa-exclamation-triangle"></i> Customer Not Found</h4>
+        <p>The customer you're looking for doesn't exist.</p>
+        <a asp-page="Index" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Customers
+        </a>
+    </div>
+}
+else
+{
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-6">
+                <i class="fas fa-user text-primary"></i> @Model.Customer.FullName
+            </h1>
+            <div class="d-flex gap-3 mb-3">
+                <span class="badge bg-@(Model.Customer.BikingExperience switch 
+                {
+                    ExperienceLevel.Beginner => "success",
+                    ExperienceLevel.Recreational => "info",
+                    ExperienceLevel.Intermediate => "warning",
+                    ExperienceLevel.Advanced => "danger",
+                    ExperienceLevel.Professional => "dark",
+                    _ => "secondary"
+                }) fs-6">
+                    <i class="fas fa-bicycle"></i> @Model.Customer.BikingExperience Level
+                </span>
+                @if (Model.Customer.HasSignedWaiver)
+                {
+                    <span class="badge bg-success fs-6">
+                        <i class="fas fa-check-circle"></i> Waiver Signed
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-warning fs-6">
+                        <i class="fas fa-exclamation-triangle"></i> Waiver Pending
+                    </span>
+                }
+            </div>
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="btn-group" role="group">
+                <a asp-page="Edit" asp-route-id="@Model.Customer.Id" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Customer
+                </a>
+                @if (!Model.Customer.HasSignedWaiver)
+                {
+                    <form method="post" asp-page-handler="MarkWaiverSigned" asp-route-id="@Model.Customer.Id" class="d-inline">
+                        <button type="submit" class="btn btn-success" 
+                                onclick="return confirm('Mark waiver as signed for @Model.Customer.FullName?')">
+                            <i class="fas fa-file-signature"></i> Mark Waiver Signed
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-id-card"></i> Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Full Name:</strong></div>
+                        <div class="col-sm-8">@Model.Customer.FullName</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Email:</strong></div>
+                        <div class="col-sm-8">
+                            <a href="mailto:@Model.Customer.Email" class="text-decoration-none">
+                                <i class="fas fa-envelope"></i> @Model.Customer.Email
+                            </a>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Customer.PhoneNumber))
+                    {
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Phone:</strong></div>
+                            <div class="col-sm-8">
+                                <a href="tel:@Model.Customer.PhoneNumber" class="text-decoration-none">
+                                    <i class="fas fa-phone"></i> @Model.Customer.PhoneNumber
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Date of Birth:</strong></div>
+                        <div class="col-sm-8">
+                            @Model.Customer.DateOfBirth.ToString("MMMM dd, yyyy") 
+                            <small class="text-muted">(Age: @Model.Customer.Age)</small>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Customer.City) || !string.IsNullOrEmpty(Model.Customer.Country))
+                    {
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Location:</strong></div>
+                            <div class="col-sm-8">
+                                <i class="fas fa-map-marker-alt"></i>
+                                @Model.Customer.City@(!string.IsNullOrEmpty(Model.Customer.Country) ? $", {Model.Customer.Country}" : "")
+                            </div>
+                        </div>
+                    }
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Registered:</strong></div>
+                        <div class="col-sm-8">
+                            <i class="fas fa-calendar"></i> @Model.Customer.RegisteredAt.ToString("MMMM dd, yyyy 'at' h:mm tt")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-bicycle"></i> Cycling Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-5"><strong>Experience Level:</strong></div>
+                        <div class="col-sm-7">
+                            <span class="badge bg-@(Model.Customer.BikingExperience switch 
+                            {
+                                ExperienceLevel.Beginner => "success",
+                                ExperienceLevel.Recreational => "info",
+                                ExperienceLevel.Intermediate => "warning",
+                                ExperienceLevel.Advanced => "danger",
+                                ExperienceLevel.Professional => "dark",
+                                _ => "secondary"
+                            })">
+                                @Model.Customer.BikingExperience
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-5"><strong>Waiver Status:</strong></div>
+                        <div class="col-sm-7">
+                            @if (Model.Customer.HasSignedWaiver)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle"></i> Signed
+                                </span>
+                                <br />
+                                <small class="text-success">
+                                    <i class="fas fa-shield-alt"></i> Customer is cleared for tours
+                                </small>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">
+                                    <i class="fas fa-exclamation-triangle"></i> Pending
+                                </span>
+                                <br />
+                                <small class="text-warning">
+                                    <i class="fas fa-exclamation-circle"></i> Waiver required before tours
+                                </small>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (!Model.Customer.HasSignedWaiver)
+            {
+                <div class="card mt-3 border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="mb-0">
+                            <i class="fas fa-file-signature"></i> Waiver Required
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            This customer must sign an insurance waiver before participating in any tours.
+                        </p>
+                        <form method="post" asp-page-handler="MarkWaiverSigned" asp-route-id="@Model.Customer.Id">
+                            <button type="submit" class="btn btn-success" 
+                                    onclick="return confirm('Mark waiver as signed for @Model.Customer.FullName?')">
+                                <i class="fas fa-check-circle"></i> Mark as Signed
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-page="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Customers
+        </a>
+        <a asp-page="Edit" asp-route-id="@Model.Customer.Id" class="btn btn-primary">
+            <i class="fas fa-edit"></i> Edit Customer
+        </a>
+    </div>
+}

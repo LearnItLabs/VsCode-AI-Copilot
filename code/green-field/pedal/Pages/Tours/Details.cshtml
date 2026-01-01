@@ -1,0 +1,252 @@
+@page
+@model RazorSimple.Pages.Tours.DetailsModel
+@{
+    ViewData["Title"] = Model.Tour?.Name ?? "Tour Details";
+}
+
+@if (Model.Tour == null)
+{
+    <div class="alert alert-danger">
+        <h4><i class="fas fa-exclamation-triangle"></i> Tour Not Found</h4>
+        <p>The tour you're looking for doesn't exist.</p>
+        <a asp-page="Index" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Tours
+        </a>
+    </div>
+}
+else
+{
+    <!-- Tour Hero Image -->
+    <div class="tour-image-container position-relative" style="height: 300px; margin-bottom: 2rem;">
+        <img src="~/images/PromoPics/@(Model.Tour.Name.ToLower() switch {
+            var name when name.Contains("mountain") => "Mountain-Header.jpg",
+            var name when name.Contains("coastal") => "Coast-Header.jpg", 
+            var name when name.Contains("desert") => "Desert-Header.jpg",
+            var name when name.Contains("countryside") || name.Contains("farm") => "Farm-Header.jpg",
+            var name when name.Contains("urban") => "Urban-Header.jpg",
+            _ => "Mountain-Header.jpg"
+        })" 
+        alt="@Model.Tour.Name" 
+        class="tour-promo-image rounded" 
+        style="height: 300px;" />
+        <div class="tour-image-overlay" style="font-size: 4rem;">
+            <i class="@(Model.Tour.Name.ToLower() switch {
+                var name when name.Contains("mountain") => "fas fa-mountain-sun",
+                var name when name.Contains("coastal") => "fas fa-water", 
+                var name when name.Contains("desert") => "fas fa-sun",
+                var name when name.Contains("countryside") || name.Contains("farm") => "fas fa-seedling",
+                var name when name.Contains("urban") => "fas fa-city",
+                _ => "fas fa-bicycle"
+            })"></i>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h1 class="display-5">@Model.Tour.Name</h1>
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <span class="badge bg-@(Model.Tour.Difficulty switch 
+                        {
+                            DifficultyLevel.Beginner => "success",
+                            DifficultyLevel.Intermediate => "warning",
+                            DifficultyLevel.Advanced => "danger",
+                            DifficultyLevel.Expert => "dark",
+                            _ => "secondary"
+                        }) fs-6">
+                            <i class="@(Model.Tour.Difficulty switch 
+                            {
+                                DifficultyLevel.Beginner => "fas fa-leaf",
+                                DifficultyLevel.Intermediate => "fas fa-hiking",
+                                DifficultyLevel.Advanced => "fas fa-mountain-sun",
+                                DifficultyLevel.Expert => "fas fa-fire",
+                                _ => "fas fa-bicycle"
+                            })"></i>
+                            @Model.Tour.Difficulty Level
+                        </span>
+                        @if (Model.AverageRating > 0)
+                        {
+                            <span class="rating-stars">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="@(i <= Model.AverageRating ? "fas fa-star" : "far fa-star")"></i>
+                                }
+                                <small class="text-muted">(@Model.AverageRating.ToString("F1"))</small>
+                            </span>
+                        }
+                    </div>
+                </div>
+                <div class="text-end">
+                    <div class="h2 text-primary mb-1">
+                        <i class="fas fa-dollar-sign"></i>@Model.Tour.Price
+                    </div>
+                    @if (Model.Tour.IsAvailable)
+                    {
+                        <small class="text-success">
+                            <i class="fas fa-check-circle"></i> @Model.Tour.AvailableSpots spots available
+                        </small>
+                    }
+                    else
+                    {
+                        <small class="text-danger">
+                            <i class="fas fa-times-circle"></i> Fully booked
+                        </small>
+                    }
+                </div>
+            </div>
+
+            <p class="lead">@Model.Tour.Description</p>
+
+            <div class="row mb-4">
+                <div class="col-sm-6">
+                    <div class="tour-stats">
+                        <h5><i class="fas fa-calendar-alt text-primary"></i> Tour Schedule</h5>
+                        <div class="tour-stat-item">
+                            <span class="tour-stat-icon"><i class="fas fa-play"></i></span>
+                            <strong>Start Date:</strong> @Model.Tour.StartDate.ToString("MMMM dd, yyyy")
+                        </div>
+                        <div class="tour-stat-item">
+                            <span class="tour-stat-icon"><i class="fas fa-stop"></i></span>
+                            <strong>End Date:</strong> @Model.Tour.EndDate.ToString("MMMM dd, yyyy")
+                        </div>
+                        <div class="tour-stat-item">
+                            <span class="tour-stat-icon"><i class="fas fa-clock"></i></span>
+                            <strong>Duration:</strong> @Model.Tour.DurationDays day@(Model.Tour.DurationDays != 1 ? "s" : "")
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="tour-stats">
+                        <h5><i class="fas fa-bicycle text-primary"></i> Tour Details</h5>
+                        <div class="tour-stat-item">
+                            <span class="tour-stat-icon"><i class="fas fa-route"></i></span>
+                            <strong>Distance:</strong> @Model.Tour.DistanceKm km
+                        </div>
+                        <div class="tour-stat-item">
+                            <span class="tour-stat-icon"><i class="fas fa-users"></i></span>
+                            <strong>Max Participants:</strong> @Model.Tour.MaxParticipants
+                        </div>
+                        <div class="tour-stat-item">
+                            <span class="tour-stat-icon"><i class="fas fa-user-check"></i></span>
+                            <strong>Current Bookings:</strong> @Model.Tour.CurrentParticipants
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4 tour-stats">
+                <h5><i class="fas fa-map-marker-alt text-primary"></i> Route Information</h5>
+                <div class="tour-stat-item">
+                    <span class="tour-stat-icon"><i class="fas fa-map-pin"></i></span>
+                    <strong>Start Location:</strong> @Model.Tour.StartLocation
+                </div>
+                <div class="tour-stat-item">
+                    <span class="tour-stat-icon"><i class="fas fa-flag-checkered"></i></span>
+                    <strong>End Location:</strong> @Model.Tour.EndLocation
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-shopping-cart"></i> Book This Tour</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Tour.IsAvailable)
+                    {
+                        <p class="text-success">
+                            <i class="fas fa-check-circle"></i> Available for booking
+                        </p>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary btn-lg" disabled>
+                                <i class="fas fa-calendar-plus"></i> Book Now
+                            </button>
+                            <small class="text-muted">Booking functionality coming soon!</small>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-danger">
+                            <i class="fas fa-times-circle"></i> This tour is fully booked
+                        </p>
+                        <div class="d-grid">
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-ban"></i> Fully Booked
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6><i class="fas fa-list-check"></i> What's Included</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li><i class="fas fa-check text-success"></i> Professional guide</li>
+                        <li><i class="fas fa-check text-success"></i> Safety equipment</li>
+                        <li><i class="fas fa-check text-success"></i> Route planning</li>
+                        <li><i class="fas fa-check text-success"></i> Local insights</li>
+                        <li><i class="fas fa-check text-success"></i> Emergency support</li>
+                        <li><i class="fas fa-times text-danger"></i> Bike rental (available separately)</li>
+                        <li><i class="fas fa-times text-danger"></i> Accommodation</li>
+                        <li><i class="fas fa-times text-danger"></i> Meals (local recommendations provided)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Testimonials.Any())
+    {
+        <div class="mt-5">
+            <h3><i class="fas fa-comments text-primary"></i> Customer Reviews</h3>
+            <div class="row">
+                @foreach (var testimonial in Model.Testimonials.Take(6))
+                {
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card h-100 testimonial-card @(testimonial.IsFeatured ? "testimonial-featured" : "")">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="card-title mb-1">
+                                        <i class="fas fa-user"></i> @testimonial.CustomerName
+                                    </h6>
+                                    <span class="rating-stars">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="@(i <= testimonial.Rating ? "fas fa-star" : "far fa-star")"></i>
+                                        }
+                                    </span>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="fas fa-map-marker-alt"></i> @testimonial.CustomerCity, @testimonial.CustomerCountry
+                                </small>
+                                <p class="card-text mt-2">@testimonial.ShortReview</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar"></i> @testimonial.ReviewDate.ToString("MMM dd, yyyy")
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (Model.Testimonials.Count > 6)
+            {
+                <div class="text-center mt-3">
+                    <a asp-page="/Testimonials/Index" asp-route-tourId="@Model.Tour.Id" class="btn btn-outline-primary">
+                        <i class="fas fa-eye"></i> View All @Model.Testimonials.Count Reviews
+                    </a>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-page="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Tours
+        </a>
+    </div>
+}

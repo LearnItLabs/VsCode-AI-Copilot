@@ -1,0 +1,187 @@
+@page
+@model RazorSimple.Pages.Testimonials.IndexModel
+@{
+	ViewData["Title"] = "Customer Testimonials";
+}
+@* for a Pull request example *@
+<div class="row mb-4">
+	<div class="col-md-8">
+		<h1 class="display-4"><i class="fas fa-star text-warning"></i> Customer Testimonials</h1>
+		<p class="lead">See what our customers say about their Pedal & Pine Tours experience</p>
+		@if (Model.OverallAverageRating > 0)
+		{
+			<div class="d-flex align-items-center gap-2">
+				<span class="h5 mb-0">Overall Rating:</span>
+				<span class="rating-stars h4 mb-0">
+					@for (int i = 1; i <= 5; i++)
+					{
+						<i class="@(i <= Model.OverallAverageRating ? "fas fa-star" : "far fa-star")"></i>
+					}
+				</span>
+				<span class="text-muted">(@Model.OverallAverageRating.ToString("F1") out of 5)</span>
+			</div>
+		}
+	</div>
+	<div class="col-md-4">
+		<div class="search-filters">
+			<form method="get" class="d-flex flex-column gap-2">
+				<select name="tourId" class="form-select">
+					<option value=""><i class="fas fa-route"></i> All Tours</option>
+					@foreach (var tour in Model.Tours)
+					{
+						<option value="@tour.Id" selected="@(Model.FilterTourId == tour.Id)">@tour.Name</option>
+					}
+				</select>
+				<select name="rating" class="form-select">
+					<option value=""><i class="fas fa-star"></i> All Ratings</option>
+					<option value="5" selected="@(Model.FilterRating == 5)">5 Stars</option>
+					<option value="4" selected="@(Model.FilterRating == 4)">4 Stars</option>
+					<option value="3" selected="@(Model.FilterRating == 3)">3 Stars</option>
+					<option value="2" selected="@(Model.FilterRating == 2)">2 Stars</option>
+					<option value="1" selected="@(Model.FilterRating == 1)">1 Star</option>
+				</select>
+				<button type="submit" class="btn btn-primary">
+					<i class="fas fa-filter"></i> Filter
+				</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+@if (Model.FeaturedTestimonials.Any() && !Model.FilterTourId.HasValue && !Model.FilterRating.HasValue)
+{
+	<div class="mb-5">
+		<h3><i class="fas fa-trophy text-warning"></i> Featured Reviews</h3>
+		<div class="row">
+			@foreach (var testimonial in Model.FeaturedTestimonials)
+			{
+				<div class="col-md-4 mb-3">
+					<div class="card border-warning h-100 testimonial-featured">
+						<div class="card-header bg-warning text-dark">
+							<div class="d-flex justify-content-between align-items-center">
+								<h6 class="mb-0">
+									<i class="fas fa-user"></i> @testimonial.CustomerName
+								</h6>
+								<span class="rating-stars">
+									@for (int i = 1; i <= 5; i++)
+									{
+										<i class="@(i <= testimonial.Rating ? "fas fa-star" : "far fa-star")"></i>
+									}
+								</span>
+							</div>
+							<small>
+								<i class="fas fa-map-marker-alt"></i> @testimonial.CustomerCity, @testimonial.CustomerCountry
+							</small>
+						</div>
+						<div class="card-body">
+							<p class="card-text">@testimonial.Review</p>
+							<small class="text-muted">
+								<strong><i class="fas fa-route"></i> Tour:</strong> @Model.GetTourName(testimonial.TourId)<br />
+								<strong><i class="fas fa-calendar"></i> Date:</strong> @testimonial.ReviewDate.ToString("MMM dd, yyyy")
+							</small>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+}
+
+@if (Model.RatingDistribution.Any() && !Model.FilterTourId.HasValue && !Model.FilterRating.HasValue)
+{
+	<div class="mb-4">
+		<h4><i class="fas fa-chart-bar text-primary"></i> Rating Distribution</h4>
+		<div class="row">
+			@foreach (var rating in new[] { 5, 4, 3, 2, 1 })
+			{
+				var count = Model.RatingDistribution.ContainsKey(rating) ? Model.RatingDistribution[rating] : 0;
+				var total = Model.RatingDistribution.Values.Sum();
+				var percentage = total > 0 ? (count * 100.0 / total) : 0;
+
+				<div class="col-md-2">
+					<div class="text-center">
+						<div class="h5 rating-stars">
+							@for (int i = 1; i <= rating; i++)
+							{
+								<i class="fas fa-star"></i>
+							}
+						</div>
+						<div class="progress" style="height: 20px;">
+							<div class="progress-bar bg-warning" style="width: @percentage%"></div>
+						</div>
+						<small>@count reviews (@percentage.ToString("F0")%)</small>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+}
+
+<div class="row">
+	@if (!Model.Testimonials.Any())
+	{
+		<div class="col-12">
+			<div class="alert alert-info">
+				<h4><i class="fas fa-info-circle"></i> No testimonials found</h4>
+				<p>Try adjusting your filter criteria or browse all testimonials.</p>
+				<a href="/Testimonials" class="btn btn-primary">
+					<i class="fas fa-eye"></i> View All Testimonials
+				</a>
+			</div>
+		</div>
+	}
+	else
+	{
+		@foreach (var testimonial in Model.Testimonials)
+		{
+			<div class="col-md-6 col-lg-4 mb-4">
+				<div class="card h-100 testimonial-card @(testimonial.IsFeatured ? "testimonial-featured" : "")">
+					<div class="card-header">
+						<div class="d-flex justify-content-between align-items-start">
+							<div>
+								<h6 class="mb-1">
+									<i class="fas fa-user"></i> @testimonial.CustomerName
+								</h6>
+								<small class="text-muted">
+									<i class="fas fa-map-marker-alt"></i> @testimonial.CustomerCity, @testimonial.CustomerCountry
+								</small>
+							</div>
+							<span class="rating-stars">
+								@for (int i = 1; i <= 5; i++)
+								{
+									<i class="@(i <= testimonial.Rating ? "fas fa-star" : "far fa-star")"></i>
+								}
+							</span>
+						</div>
+					</div>
+					<div class="card-body">
+						<p class="card-text">@testimonial.Review</p>
+					</div>
+					<div class="card-footer">
+						<small class="text-muted">
+							<strong><i class="fas fa-route"></i> Tour:</strong>
+							<a asp-page="/Tours/Details" asp-route-id="@testimonial.TourId" class="text-decoration-none">
+								@Model.GetTourName(testimonial.TourId)
+							</a>
+							<br />
+							<strong><i class="fas fa-calendar"></i> Date:</strong> @testimonial.ReviewDate.ToString("MMM dd, yyyy")
+						</small>
+					</div>
+				</div>
+			</div>
+		}
+	}
+</div>
+
+@if (!Model.FilterTourId.HasValue && !Model.FilterRating.HasValue)
+{
+	<div class="mt-5 text-center">
+		<h3><i class="fas fa-pen text-primary"></i> Want to Share Your Experience?</h3>
+		<p class="lead">We'd love to hear about your cycling adventure with Pedal & Pine Tours!</p>
+		<button class="btn btn-primary btn-lg" disabled>
+			<i class="fas fa-star"></i> Leave a Review
+		</button>
+		<br />
+		<small class="text-muted">Review submission coming soon!</small>
+	</div>
+}
