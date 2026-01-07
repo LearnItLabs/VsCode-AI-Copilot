@@ -1,0 +1,36 @@
+/* Color Palette based on Login Mockup */
+
+:root {
+  /* Primary Gradient Colors */
+  --color-magenta: #C74B9C;
+  --color-magenta-light: #D946A6;
+  --color-purple: #6B4B9E;
+  --color-purple-light: #7B5BA8;
+  --color-blue: #4A5BA3;
+  --color-blue-light: #5865B8;
+
+  /* Background */
+  --gradient-background: linear-gradient(135deg, #C74B9C 0%, #6B4B9E 50%, #4A5BA3 100%);
+  
+  /* Accent Colors */
+  --color-navy-dark: #2A2562;
+  --color-navy: #3B3B8F;
+  --color-white: #FFFFFF;
+  --color-gold: #F4C542;
+  --color-gold-light: #FFC947;
+
+  /* Form Elements */
+  --color-input-border: rgba(255, 255, 255, 0.3);
+  --color-input-bg: rgba(255, 255, 255, 0.1);
+  --color-button-purple: #6B4B9E;
+  --color-button-purple-hover: #8B5BA8;
+  
+  /* Text Colors */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #D8B8E8;
+  --color-text-accent: #FFC947;
+
+  /* Shadow and Effects */
+  --shadow-container: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-button: 0 4px 15px rgba(107, 75, 158, 0.4);
+}
