@@ -97,3 +97,98 @@ tr:nth-child(even) {
 tr:hover {
     background-color: rgba(255, 255, 255, 0.15);
 }
+/* Team Section Styles */
+.team-section {
+    margin: 3em 0;
+    padding: 2em;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: var(--shadow-container);
+}
+
+.team-title {
+    text-align: center;
+    color: var(--color-text-primary);
+    font-size: 1.8em;
+    margin-bottom: 2em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2em;
+    margin-bottom: 2em;
+}
+
+.team-card {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 2em 1.5em;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(107, 75, 158, 0.4);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 1.5em;
+    background: linear-gradient(135deg, var(--color-button-purple), var(--color-button-purple-hover));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.avatar::after {
+    content: '👤';
+    font-size: 3em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.6;
+}
+
+.member-name {
+    font-size: 1.3em;
+    color: var(--color-text-primary);
+    margin: 0.5em 0;
+    font-weight: bold;
+}
+
+.member-role {
+    color: var(--color-text-accent);
+    font-weight: 600;
+    margin: 0.5em 0;
+    font-size: 0.95em;
+}
+
+.member-bio {
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    margin-top: 1em;
+    opacity: 0.9;
+}
+
+.team-cta {
+    display: block;
+    margin: 2em auto 0;
+    min-width: 200px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+    }
+}
