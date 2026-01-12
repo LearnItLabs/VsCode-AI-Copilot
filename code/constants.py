@@ -19,3 +19,4 @@ class Constants:
 
     class AccountThresholds:
         FreezeBalance = Decimal("900")
+        CloseBalance = Decimal("100")
