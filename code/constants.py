@@ -1,11 +1,22 @@
 from decimal import Decimal
+import json
+import os
 
 
 class Constants:
     class CommissionRate:
-        Standard = Decimal("0.08")
-        Earner = Decimal("0.11")
-        Epic = Decimal("0.14")
+        _data_file = os.path.join(os.path.dirname(__file__), "commission_rates.json")
+        
+        @classmethod
+        def _load_rates(cls):
+            with open(cls._data_file, 'r') as f:
+                rates = json.load(f)
+            return {key: Decimal(value) for key, value in rates.items()}
+        
+        _rates = _load_rates.__func__(None)
+        Standard = _rates["Standard"]
+        Earner = _rates["Earner"]
+        Epic = _rates["Epic"]
 
     class CommissionThreshold:
         EpicSalesAmount = Decimal("15000")
