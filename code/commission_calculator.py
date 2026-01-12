@@ -10,7 +10,7 @@ class CommissionCalculator:
 
         unit_price = Decimal(unit_price)
         if unit_price < 0:
-            raise ValueError("unitPrice cannot be less than zero.")
+            raise ValueError("UnitPrice cannot be less than zero.")
 
         gross_sale = Decimal(units_sold) * unit_price
 
