@@ -1,12 +1,3 @@
-Here is exactly what that Markdown file should look like to match your specific requirements.
-
-Because this is a Custom Instructions file for the commit generator, you can use plain English and simple Markdown formatting. Copilot reads this as its "Rulebook" every time you click that sparkle icon.
-
-The Markdown File Content
-Save this as .github/instructions/commit-style.md:
-
-Markdown
-
 # Git Commit Message Instructions
 
 ## Structure
